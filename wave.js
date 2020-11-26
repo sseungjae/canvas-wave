@@ -37,11 +37,32 @@ export class Wave {
 
     draw(ctx) {
         ctx.beginPath();
-        ctx.fillStyle = '#ff0000';
+        ctx.fillStyle = this.color;
 
-        this.point.update();
+        let prevX = this.points[0].x;
+        let prevY = this.points[0].y;
 
-        ctx.arc(this.point.x, this.point.y, 30, 0 , 2 * Math.PI);
+        ctx.moveTo(prevX, prevY);
+
+        for (let i = 1; i <this.totalPoints; i++){
+            if(i <this.totalPoints - 1) {
+                this.points[i].update();
+            }
+
+            const cx = (prevX + this.points[i].x) / 2;
+            const cy = (prevY + this.points[i].y) / 2;
+
+            ctx.lineTo(cx, cy);
+
+            prevX = this.points[i].x;
+            prevY = this.points[i].y;
+            
+        }
+
+        ctx.lineTo(prevX, prevY);
+        ctx.lineTo(this.stageWidth, this.stageHeight);
+        ctx.lineTo(this.points[0].x, this.stageHeight);
         ctx.fill();
+        ctx.closePath();
     }
 }
